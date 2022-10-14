@@ -20,6 +20,7 @@ A modern-day health solution used for retrieving and analyzing statistical healt
 ### SIM800L Reference
 
 - https://www.youtube.com/watch?v=porVqgYzL1M
+- https://lastminuteengineers.com/sim800l-gsm-module-arduino-tutorial/
 
 ### Heart Rate Sensor Connection
 
