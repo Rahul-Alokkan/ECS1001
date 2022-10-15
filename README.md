@@ -11,7 +11,6 @@ A modern-day health solution used for retrieving and analyzing statistical healt
 - Infineon DPS310 (Pressure Senor)
 - Arduino Nano R3 (Micro Controller)
 - Espressif ESP8266 ESP-01 (Wi-Fi Module)
-- GSMSIM800L (Connection Establishment Module)
 - Jumper Wires
 - 3.7V LiPo Battery
 - Arduino IDE
