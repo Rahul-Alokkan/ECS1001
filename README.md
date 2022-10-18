@@ -29,6 +29,15 @@ A modern-day health solution used for retrieving and analyzing statistical healt
 <img src="assets\circuit_Diagram.jpg" alt="Circuit Diagram" style="height: 500px; width:800px;"/>
 <br><br>
 
+## Contributers
+- **Aarka Lodh** - Coding
+- **Sriram Reddy** - Coding
+- **Aarsh Patel** - Hardware Design and Connection
+- **Sagnik Choudhury** - Research
+- **Shovan Ghara** - Research
+- **Rahul Alokkan** - Documentation and Design
+
+
 ## References
 
 ### SIM800L Reference
@@ -39,3 +48,7 @@ A modern-day health solution used for retrieving and analyzing statistical healt
 ### Heart Rate Sensor Connection
 
 - https://create.arduino.cc/projecthub/Johan_Ha/from-ky-039-to-heart-rate-0abfca?ref=similar&ref_id=127308&offset=3
+
+### Bluetooth Module HC-05
+
+- https://www.youtube.com/watch?v=Mt92yP34oX8
