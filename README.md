@@ -30,12 +30,12 @@ A modern-day health solution used for retrieving and analyzing statistical healt
 <br><br>
 
 ## Contributers
-- Aarka Lodd 
-- Sriram Reddy
-- Aarsh Patel
-- Sagnik Choudhury
-- Shovan Ghara
-- Rahul Alokkan
+- **Aarka Lodd** - Coding
+- **Sriram Reddy** - Coding
+- **Aarsh Patel** - Hardware Design and Connection
+- **Sagnik Choudhury** - Research
+- **Shovan Ghara** - Research
+- **Rahul Alokkan** - Documentation and Design
 
 
 ## References
