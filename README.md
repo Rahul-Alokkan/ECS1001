@@ -29,7 +29,7 @@ A modern-day health solution used for retrieving and analyzing statistical healt
 <img src="assets\circuit_Diagram.jpg" alt="Circuit Diagram" style="height: 500px; width:800px;"/>
 <br><br>
 
-## Contributers
+## Contributors
 - **Aarka Lodh** - Coding
 - **Sriram Reddy** - Coding
 - **Aarsh Patel** - Hardware Design and Connection
