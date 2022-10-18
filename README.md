@@ -48,3 +48,7 @@ A modern-day health solution used for retrieving and analyzing statistical healt
 ### Heart Rate Sensor Connection
 
 - https://create.arduino.cc/projecthub/Johan_Ha/from-ky-039-to-heart-rate-0abfca?ref=similar&ref_id=127308&offset=3
+
+### Bluetooth Module HC-05
+
+- https://www.youtube.com/watch?v=Mt92yP34oX8
