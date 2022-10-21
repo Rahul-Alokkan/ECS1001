@@ -30,6 +30,7 @@ A modern-day health solution used for retrieving and analyzing statistical healt
 <br><br>
 
 ## Contributors
+
 - **Aarka Lodh** - Coding
 - **Sriram Reddy** - Coding
 - **Aarsh Patel** - Hardware Design and Connection
@@ -37,8 +38,11 @@ A modern-day health solution used for retrieving and analyzing statistical healt
 - **Shovan Ghara** - Research
 - **Rahul Alokkan** - Documentation and Design
 
-
 ## References
+
+### Health Watch Demo
+
+- https://create.arduino.cc/projecthub/Technovation/health-band-a-smart-assistant-for-the-elderly-0fed12?ref=search& ref_id=health&offset=2
 
 ### SIM800L Reference
 
@@ -52,3 +56,7 @@ A modern-day health solution used for retrieving and analyzing statistical healt
 ### Bluetooth Module HC-05
 
 - https://www.youtube.com/watch?v=Mt92yP34oX8
+
+### Sending Heart Rate data to Blynk Cloud
+
+- https://www.youtube.com/watch?v=-QuQ0qIDg90
