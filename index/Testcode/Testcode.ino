@@ -28,9 +28,100 @@ void setup() {
   delay(20);
   */
   // Call this function if you need to get the IMU error values for your module
-  calculate_IMU_error();
-  delay(20);
+//  calculate_IMU_error();
+  delay(300);
 }
+
+//Code For Heart Rate Reading
+
+float HeartRate(){
+    float reads[samp_siz], sum;
+    long int now, ptr;
+    float last, reader, start;
+    float first, second, third, before, print_value;
+    bool rising;
+    int rise_count;
+    int n;
+    long int last_beat;
+    float values[5];
+    boolean check = false;
+
+   for (int i = 0; i < samp_siz; i++)
+      reads[i] = 0;
+    sum = 0;
+    ptr = 0;
+    
+    int j = 1;
+    float avg = 0;
+    int sum_values = 0;
+    while(j < 5){
+       n = 0;
+      start = millis();
+      reader = 0.;
+      do
+      {
+        reader += analogRead (sensorPin);
+        n++;
+        now = millis();
+      }
+      while (now < start + 20);  
+      reader /= n; 
+      
+    
+      sum -= reads[ptr];
+      sum += reader;
+      reads[ptr] = reader;
+      last = sum / samp_siz;
+    
+    if (last > before)
+      {
+        rise_count++;
+        if (!rising && rise_count > rise_threshold)
+        {
+         
+          rising = true;
+          first = millis() - last_beat;
+          last_beat = millis();
+
+         
+          print_value = 60000. / (0.4 * first + 0.3 * second + 0.3 * third);
+          
+           values[j - 1] = print_value;
+            sum = sum + print_value;
+            j++;
+           
+           third = second;
+           second = first;
+
+            if(j == 5){
+              j = 1;
+              int avg = sum / 5;
+              break;
+            }
+       
+          
+        }
+      }
+      else
+      {
+       
+        rising = false;
+        rise_count = 0;
+      }
+      before = last;
+      ptr++;
+      ptr %= samp_siz;
+
+    }
+    if(avg * 1 != 0){
+      check = true;
+    }
+    if(check == true){
+    return avg;
+    }
+    return 0.0;
+    }
+    
 void loop() {
   // === Read acceleromter data === //
   Wire.beginTransmission(MPU);
@@ -62,18 +153,35 @@ void loop() {
   // Currently the raw values are in degrees per seconds, deg/s, so we need to multiply by sendonds (s) to get the angle in degrees
   gyroAngleX = gyroAngleX + GyroX * elapsedTime; // deg/s * s = deg
   gyroAngleY = gyroAngleY + GyroY * elapsedTime;
+
+  //Initializing values Here 
+  
   yaw =  yaw + GyroZ * elapsedTime;
   // Complementary filter - combine acceleromter and gyro angle values
   roll = 0.96 * gyroAngleX + 0.04 * accAngleX;
   pitch = 0.96 * gyroAngleY + 0.04 * accAngleY;
   
   // Print the values on the serial monitor
+
+
+
+//Calling Heart Rate Function
+float rate = HeartRate();
+Serial.println("Heart Rate Reading");
+Serial.println(rate);
+Serial.println("Accelearometer Readings");
   Serial.print(roll);
   Serial.print("/");
   Serial.print(pitch);
   Serial.print("/");
   Serial.println(yaw);
 }
+
+
+
+
+    
+    
 void calculate_IMU_error() {
   // We can call this funtion in the setup section to calculate the accelerometer and gyro data error. From here we will get the error values used in the above equations printed on the Serial Monitor.
   // Note that we should place the IMU flat in order to get the proper values, so that we then can the correct values
