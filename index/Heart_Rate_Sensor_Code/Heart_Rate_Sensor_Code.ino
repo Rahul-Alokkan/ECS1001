@@ -18,7 +18,7 @@ float HeartRate(){
     int n;
     long int last_beat;
     float values[5];
-    boolean check = false;
+    int flag  = 0;
 
    for (int i = 0; i < samp_siz; i++)
       reads[i] = 0;
@@ -28,7 +28,7 @@ float HeartRate(){
     int j = 1;
     float avg = 0;
     int sum_values = 0;
-    while(j < 5){
+    while(j <= 5){
        n = 0;
       start = millis();
       reader = 0.;
@@ -61,7 +61,8 @@ float HeartRate(){
           print_value = 60000. / (0.4 * first + 0.3 * second + 0.3 * third);
           
            values[j - 1] = print_value;
-            sum = sum + print_value;
+           Serial.println(values[j-1]);
+            sum_values = sum_values + print_value;
             j++;
            
            third = second;
@@ -69,12 +70,10 @@ float HeartRate(){
 
             if(j == 5){
               j = 1;
-              int avg = sum / 5;
+              avg = (sum_values / 4);
               break;
             }
-       
-          
-        }
+       }
       }
       else
       {
@@ -87,13 +86,18 @@ float HeartRate(){
       ptr %= samp_siz;
 
     }
+    
     if(avg * 1 != 0){
-      check = true;
+      flag = 1;
     }
-    if(check == true){
-    return avg;
-    }
+    
+    if(flag == 1){
+    Serial.println("Average Value :");  
+    Serial.println(avg);
+    }else{
     Serial.println("Not Getting Correct Value");
+    }
+    
     return 0.0;
     }
     
