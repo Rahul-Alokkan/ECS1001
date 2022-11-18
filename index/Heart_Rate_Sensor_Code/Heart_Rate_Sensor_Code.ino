@@ -61,6 +61,7 @@ float HeartRate(){
           print_value = 60000. / (0.4 * first + 0.3 * second + 0.3 * third);
           
            values[j - 1] = print_value;
+           Serial.println("Measured Value ;");
            Serial.println(values[j-1]);
             sum_values = sum_values + print_value;
             j++;
