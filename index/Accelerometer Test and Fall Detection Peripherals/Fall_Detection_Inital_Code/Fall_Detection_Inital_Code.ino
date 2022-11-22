@@ -1,4 +1,14 @@
 #include <Wire.h>
+#define BLYNK_PRINT Serial
+#include <ESP8266WiFi.h>
+#include <BlynkSimpleEsp8266.h>
+#define BLYNK_TEMPLATE_ID "TMPLMidodInr"
+#define BLYNK_DEVICE_NAME "ECSProject"
+#define BLYNK_AUTH_TOKEN "-dh0LkLXE7D5k5XSXhaWU6jD7Xndt6XB"
+
+char auth[] = "-dh0LkLXE7D5k5XSXhaWU6jD7Xndt6XB"; 
+const char *ssid = ""; 
+const char *pass = ""; 
 
 const int MPU_addr=0x68;  // I2C address of the MPU-6050
 int16_t AcX,AcY,AcZ,Tmp,GyX,GyY,GyZ;
@@ -18,11 +28,24 @@ int angleChange=0;
 
 void setup(){
  Wire.begin();
+ Blynk.begin(auth, ssid, pass);
  Wire.beginTransmission(MPU_addr);
  Wire.write(0x6B);  
  Wire.write(0);     
  Wire.endTransmission(true);
  Serial.begin(115200);
+
+   Serial.println("Wrote to IMU");
+   Serial.println("Connecting to ");
+   Serial.println(ssid);
+   WiFi.begin(ssid, pass);
+   while (WiFi.status() != WL_CONNECTED)
+   {
+     delay(500);
+     Serial.print(".");              
+   }
+   Serial.println("");
+   Serial.println("WiFi connected");
 
  pinMode(11, OUTPUT);
  
@@ -77,17 +100,16 @@ Serial.println("TRIGGER 3 DEACTIVATED");
 }     
 }   
 }   
-if (fall == true) { //in event of a fall detection     
+if (fall == true) {     
 Serial.println("FALL DETECTED");     
-//Blynk.notify("Alert : Fall Detected…! take action immediately.");     
-//Blynk.email("ask.theiotprojects@gmail.com", "Alert : Fall Detected…!", "Alert : Fall Detected…! take action immediately.");     
+Blynk.logEvent("Fall Detected ,Take Necessary actions");
 fall = false;   
 }   
-if (trigger2count >= 6) { //allow 0.5s for orientation change
+if (trigger2count >= 6) { 
      trigger2 = false; trigger2count = 0;
      Serial.println("TRIGGER 2 DECACTIVATED");
    }
-   if (trigger1count >= 6) { //allow 0.5s for AM to break upper threshold
+   if (trigger1count >= 6) { 
      trigger1 = false; trigger1count = 0;
      Serial.println("TRIGGER 1 DECACTIVATED");
    }
@@ -96,8 +118,8 @@ if (trigger2count >= 6) { //allow 0.5s for orientation change
 
 
 void loop(){
-
-Falldetection();
+   Blynk.run();
+   Falldetection();
  }
 
 void mpu_read(){
