@@ -1,6 +1,17 @@
 #include <Wire.h>
 #define samp_siz 4
 #define rise_threshold 4
+#define BLYNK_PRINT Serial
+#include <ESP8266WiFi.h>
+#include <BlynkSimpleEsp8266.h>
+#define BLYNK_TEMPLATE_ID "TMPLMidodInr"
+#define BLYNK_DEVICE_NAME "ECSProject"
+#define BLYNK_AUTH_TOKEN "-dh0LkLXE7D5k5XSXhaWU6jD7Xndt6XB"
+
+
+char auth[] = "-dh0LkLXE7D5k5XSXhaWU6jD7Xndt6XB"; 
+const char *ssid = ""; 
+const char *pass = ""; 
 
 const int MPU_addr=0x68;  // I2C address of the MPU-6050
 int16_t AcX,AcY,AcZ,Tmp,GyX,GyY,GyZ;
@@ -24,11 +35,24 @@ int sensorPin = 0;
 void setup() {
  Wire.begin();
  Wire.beginTransmission(MPU_addr);
+ Blynk.begin(auth, ssid, pass);
  Wire.write(0x6B);  
  Wire.write(0);     
  Wire.endTransmission(true);
  Serial.begin(115200);
  pinMode(11, OUTPUT);
+
+   Serial.println("Wrote to IMU");
+   Serial.println("Connecting to ");
+   Serial.println(ssid);
+   WiFi.begin(ssid, pass);
+   while (WiFi.status() != WL_CONNECTED)
+   {
+     delay(500);
+     Serial.print(".");              
+   }
+   Serial.println("");
+   Serial.println("WiFi connected");
 }
 
 float HeartRate(){
@@ -116,8 +140,13 @@ float HeartRate(){
     }
     
     if(flag == 1){
-//    Serial.println("Average Value :");  
-//    Serial.println(avg);
+        float h = avg;
+   
+   if (isnan(h)) {
+    Serial.println("Failed to read from Heart sensor!");
+  }
+  Blynk.virtualWrite(V5, h);
+    return 0.0;
     }else{
     Serial.println("Not Getting Correct Value");
     }
@@ -133,17 +162,17 @@ void Falldetection(){
    gx = (GyX + 270) / 131.07;
    gy = (GyY - 351) / 131.07;
    gz = (GyZ + 136) / 131.07;
-   // calculating Amplitute vactor for 3 axis
+ 
    float Raw_Amp = pow(pow(ax, 2) + pow(ay, 2) + pow(az, 2), 0.5);
-   int Amp = Raw_Amp * 10;  // Mulitiplied by 10 bcz values are between 0 to 1
-//   Serial.println(Amp);
+   int Amp = Raw_Amp * 10;  
+
 if (Amp <= 2 && trigger2 == false) { //if AM breaks lower threshold (0.4g)     
 trigger1 = true;     
 Serial.println("TRIGGER 1 ACTIVATED");   
 }   
 if (trigger1 == true) {     
 trigger1count++;     
-if (Amp >= 12) { //if AM breaks upper threshold (3g)
+if (Amp >= 12) { 
        trigger2 = true;
        Serial.println("TRIGGER 2 ACTIVATED");
        trigger1 = false; trigger1count = 0;
@@ -173,13 +202,12 @@ Serial.println("TRIGGER 3 DEACTIVATED");
 }     
 }   
 }   
-if (fall == true) { //in event of a fall detection     
+if (fall == true) {     
 Serial.println("FALL DETECTED");     
-//Blynk.notify("Alert : Fall Detected…! take action immediately.");     
-//Blynk.email("ask.theiotprojects@gmail.com", "Alert : Fall Detected…!", "Alert : Fall Detected…! take action immediately.");     
+Blynk.logEvent("Fall Detected ,Take Necessary actions");
 fall = false;   
 }   
-if (trigger2count >= 6) { //allow 0.5s for orientation change
+if (trigger2count >= 6) {
      trigger2 = false; trigger2count = 0;
      Serial.println("TRIGGER 2 DECACTIVATED");
    }
@@ -194,6 +222,8 @@ if (trigger2count >= 6) { //allow 0.5s for orientation change
     
 
 void loop() {
-  // put your main code here, to run repeatedly:
+   Blynk.run();
+   Falldetection();
+   HeartRate(); 
 
-}
+   }
