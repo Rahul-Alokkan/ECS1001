@@ -1,14 +1,23 @@
 #include <Wire.h>
 #define BLYNK_PRINT Serial
-#include <ESP8266WiFi.h>
-#include <BlynkSimpleEsp8266.h>
 #define BLYNK_TEMPLATE_ID "TMPLMidodInr"
 #define BLYNK_DEVICE_NAME "ECSProject"
 #define BLYNK_AUTH_TOKEN "-dh0LkLXE7D5k5XSXhaWU6jD7Xndt6XB"
 
+#include <ESP8266_Lib.h>
+#include <BlynkSimpleShieldEsp8266.h>
+
+
 char auth[] = "-dh0LkLXE7D5k5XSXhaWU6jD7Xndt6XB"; 
-const char *ssid = ""; 
-const char *pass = ""; 
+char ssid[] = "Sri Ram"; 
+char   pass[] = "Reddy2211."; 
+
+#include <SoftwareSerial.h>
+SoftwareSerial EspSerial(4, 5); // RX, TX
+
+#define ESP8266_BAUD 9600
+
+ESP8266 wifi(&EspSerial);
 
 const int MPU_addr=0x68;  // I2C address of the MPU-6050
 int16_t AcX,AcY,AcZ,Tmp,GyX,GyY,GyZ;
@@ -28,24 +37,33 @@ int angleChange=0;
 
 void setup(){
  Wire.begin();
- Blynk.begin(auth, ssid, pass);
+
  Wire.beginTransmission(MPU_addr);
  Wire.write(0x6B);  
  Wire.write(0);     
  Wire.endTransmission(true);
- Serial.begin(115200);
+ Serial.begin(9600);
+   delay(10);
 
-   Serial.println("Wrote to IMU");
-   Serial.println("Connecting to ");
-   Serial.println(ssid);
-   WiFi.begin(ssid, pass);
-   while (WiFi.status() != WL_CONNECTED)
-   {
-     delay(500);
-     Serial.print(".");              
-   }
-   Serial.println("");
-   Serial.println("WiFi connected");
+  EspSerial.begin(ESP8266_BAUD);
+  delay(10);
+
+  Blynk.begin(auth, wifi, ssid, pass);
+  Falldetection();
+
+ 
+
+//   Serial.println("Wrote to IMU");
+//   Serial.println("Connecting to ");
+//   Serial.println(ssid);
+//   WiFi.begin(ssid, pass);
+//   while (WiFi.status() != WL_CONNECTED)
+//   {
+//     delay(500);
+//     Serial.print(".");              
+//   }
+//   Serial.println("");
+//   Serial.println("WiFi connected");
 
  pinMode(11, OUTPUT);
  
@@ -119,7 +137,7 @@ if (trigger2count >= 6) {
 
 void loop(){
    Blynk.run();
-   Falldetection();
+ 
  }
 
 void mpu_read(){
