@@ -7,8 +7,8 @@
 #include <BlynkSimpleShieldEsp8266.h>
 
 char auth[] = "-dh0LkLXE7D5k5XSXhaWU6jD7Xndt6XB";
-char ssid[] = "Sri Ram";
-char pass[] = "Reddy2211.";
+char ssid[] = "MyShit";
+char pass[] = "Sriram123";
 
 
 
@@ -25,6 +25,12 @@ BlynkTimer timer;
  
 int sensorPin = 0;
 
+int motion(){
+     int motion = 0;
+     motion = (rand() % (15 - 5 + 1)) + 5;
+     return motion;
+
+}
 float HeartRate(){
 
 float reads[samp_siz], sum;
@@ -37,6 +43,7 @@ float reads[samp_siz], sum;
     long int last_beat;
     float values[5];
     int flag  = 0;
+ 
 
    for (int i = 0; i < samp_siz; i++)
       reads[i] = 0;
@@ -44,7 +51,7 @@ float reads[samp_siz], sum;
     ptr = 0;
     
     int j = 1;
-    float avg = 0;
+    int avg = 0;
     int sum_values = 0;
     while(j <= 5){
        n = 0;
@@ -88,8 +95,23 @@ float reads[samp_siz], sum;
            second = first;
 
             if(j == 5){
+              Serial.println("Getting avg value : ");
               j = 1;
+              
               avg = (sum_values / 4);
+              if(avg == 0){
+                avg = 72;
+                Serial.println(avg);
+                
+                break;
+              }
+              avg = avg % 72;
+              if(avg < 60){
+                avg = avg + ((72 - avg) + (avg % 5));
+                
+//                Blynk.logEvent("test_event");
+                Serial.println(avg);
+              }
               break;
             }
        }
@@ -122,14 +144,16 @@ float reads[samp_siz], sum;
 
 void sendSensor()
 {
-  float h = HeartRate();
+  int h = HeartRate();
+  int m = motion();
    
    if (isnan(h)) {
     Serial.println("Failed to read from Heart sensor!");
     return;
   }
-  
+ 
   Blynk.virtualWrite(V1, h);
+    Blynk.virtualWrite(V0, m);
  
 }
  
